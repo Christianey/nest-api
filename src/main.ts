@@ -1,12 +1,13 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './all-exception-filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  process.on('uncaughtException', (error) => {
-    console.log("catching error!")
-    console.log(error);
-  });
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  app.enableCors();
+  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
 bootstrap();

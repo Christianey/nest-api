@@ -6,14 +6,10 @@ import { DatabaseService } from 'src/database/database.service';
 export class EmployeesService {
   constructor(private readonly databaseService: DatabaseService) {}
   async create(createEmployeeDto: Prisma.EmployeeCreateInput) {
-    try {
-      const employee = await this.databaseService.employee.create({ data: createEmployeeDto });
-      return employee
-    } catch (error) {
-      console.log('email type error');
-      console.log('creation error');
-      console.log(error);
-    }
+    const employee = await this.databaseService.employee.create({
+      data: createEmployeeDto,
+    });
+    return employee;
   }
 
   async findAll(role?: 'INTERN' | 'ADMIN') {
